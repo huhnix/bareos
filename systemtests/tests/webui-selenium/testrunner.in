@@ -1,0 +1,52 @@
+#!/bin/sh
+#
+# Run a simple backup
+#   then restore it.
+#
+TestName="$(basename "$(pwd)")"
+export TestName
+
+JobName=backup-bareos-fd
+. ./environment
+. ${scripts}/functions
+
+${scripts}/cleanup
+${scripts}/setup
+
+
+# Directory to backup.
+# This directory will be created by setup_data().
+BackupDirectory="${tmp}/data"
+
+# Use a tgz to setup data to be backuped.
+# Data will be placed at "${tmp}/data/".
+setup_data
+
+start_test
+
+cat <<END_OF_DATA >$tmp/bconcmds
+@$out /dev/null
+messages
+@$out $tmp/log1.out
+setdebug level=100 storage=File
+label volume=TestVolume001 storage=File pool=Full
+run job=$JobName yes
+wait
+messages
+quit
+END_OF_DATA
+
+run_bareos
+
+#BAREOS_WEBUI_CONFDIR=@webuiconfdir@
+#export BAREOS_WEBUI_CONFDIR
+
+@PHP@ -S 0.0.0.0:@php_port@ -t @PROJECT_SOURCE_DIR@/../webui/public/ & PHP_PID=$(echo $!)
+
+@PYTHON@ @CMAKE_SOURCE_DIR@/webui/tests/selenium/webui-selenium-test.py
+
+kill "${PHP_PID}"
+
+stop_bareos
+
+end_test

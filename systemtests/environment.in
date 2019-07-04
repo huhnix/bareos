@@ -54,3 +54,21 @@ export tmp
 export db_name=@db_name@
 export db_password=@db_password@
 export db_user=@db_user@
+
+#
+# Selenium test
+#
+
+export BAREOS_WEBUI_CONFDIR=@webuiconfdir@
+
+export BAREOS_BROWSER=chrome
+export BAREOS_CHROMEDRIVER_PATH=@CHROMEDRIVER@
+
+export BAREOS_BASE_URL=http://localhost:@php_port@/
+export BAREOS_USERNAME=admin
+export BAREOS_PASSWORD=admin
+export BAREOS_CLIENT_NAME=bareos-fd
+export BAREOS_RESTOREFILE=${tmp}/data
+export BAREOS_LOG_PATH=${logdir}
+export BAREOS_DELAY=1
+

@@ -35,13 +35,8 @@
  * file.
  */
 
-if(!empty(getenv('BAREOS_WEBUI_CONFDIR'))) {
-   $directors_ini = getenv('BAREOS_WEBUI_CONFDIR')."/directors.ini";
-   $configuration_ini = getenv('BAREOS_WEBUI_CONFDIR')."/configuration.ini";
-} else {
-   $directors_ini = "@WEBUICONFDIR@/directors.ini";
-   $configuration_ini = "@WEBUICONFDIR@/configuration.ini";
-}
+$directors_ini = "@webuiconfdir@/directors.ini";
+$configuration_ini = "@webuiconfdir@/configuration.ini";
 
 $directors = null;
 $configuration = null;
@@ -144,7 +139,7 @@ function read_directors_ini($directors, $directors_ini)
             $arr[key($directors)]['port'] = $instance['dirport'];
          }
          else {
-            $arr[key($directors)]['port'] = @dirport@;
+            $arr[key($directors)]['port'] = @dir_port@;
          }
 
          if(array_key_exists('tls_verify_peer', $instance) && isset($instance['tls_verify_peer'])) {

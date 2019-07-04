@@ -181,6 +181,12 @@ class SeleniumTest(unittest.TestCase):
             if self.browser == 'chrome':
                 chromedriverpath = self.getChromedriverpath()
                 self.driver = webdriver.Chrome(chromedriverpath)
+                # disable experimental feature
+                opt = webdriver.ChromeOptions()
+                opt.add_experimental_option('w3c',False)
+                self.driver = webdriver.Chrome(chrome_options=opt)
+                # set explicit window size
+                self.driver.set_window_size(1920,1080)
             elif self.browser == "firefox":
                 d = DesiredCapabilities.FIREFOX
                 d['loggingPrefs'] = {'browser': 'ALL'}
@@ -304,7 +310,7 @@ class SeleniumTest(unittest.TestCase):
             self.wait_for_element(By.XPATH, '//a[contains(text(),"%s/")]' % i).send_keys(Keys.ARROW_RIGHT)
         self.wait_for_element(By.XPATH, '//a[contains(text(),"%s")]' % pathlist[-1]).click()
         # Submit restore
-        self.wait_and_click(By.XPATH, '//input[@id="submit"]')
+        self.wait_and_click(By.XPATH, '//button[@id="btn-form-submit"]')
         # Confirms alert
         self.assertRegexpMatches(self.close_alert_and_get_its_text(), r'^Are you sure[\s\S]$')
         # switch to dashboard to prevent that modals are open before logout
@@ -402,7 +408,7 @@ class SeleniumTest(unittest.TestCase):
 
     def getChromedriverpath(self):
         # On OS X: Chromedriver path is 'usr/local/lib/chromium-browser/chromedriver'
-        for chromedriverpath in ['/usr/lib/chromium-browser/chromedriver', '/usr/local/lib/chromium-browser/chromedriver']:
+        for chromedriverpath in ['/usr/local/sbin/chromedriver', '/usr/local/bin/chromedriver', '/usr/lib/chromium-browser/chromedriver', '/usr/local/lib/chromium-browser/chromedriver']:
             if os.path.isfile(chromedriverpath):
                 return chromedriverpath
         raise IOError('Chrome Driver file not found.')
