@@ -215,7 +215,7 @@ foreach(TEST_NAME ${SYSTEM_TESTS})
   file(MAKE_DIRECTORY ${tmpdir})
   file(MAKE_DIRECTORY ${working_dir})
 
-  #file(COPY ${CMAKE_SOURCE_DIR}/webui DESTINATION ${current_test_directory})
+  # webui
   configure_file("global.php.in" "tests/${TEST_NAME}/webui/config/autoload/global.php" @ONLY)
   configure_file("directors.ini.in" "tests/${TEST_NAME}/etc/bareos-webui/directors.ini" @ONLY)
 
