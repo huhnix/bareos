@@ -85,3 +85,4 @@ if (${ZLIB_FOUND})
 endif()
 
 find_package(Readline)
+INCLUDE(thread)
